@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-card">
+  <h3>Doctor Login</h3>
+  <form method="POST">
+    <label>Email</label>
+    <input type="email" name="email" required />
+    <label>Password</label>
+    <input type="password" name="password" required />
+    <button class="btn primary" type="submit">Login</button>
+    <p class="muted small">Only approved doctors can access the X-ray analysis system.</p>
+    <p class="muted small">New here? <a href="{{ url_for('register') }}">Register</a></p>
+  </form>
+</div>
+{% endblock %}

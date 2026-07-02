@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero hero-xray">
+  <div class="hero-left">
+    <h2 style="font-size:32px; margin-bottom:20px;">X-ray Analysis (Doctors)</h2>
+
+    <form class="card xray-form" action="{{ url_for('analyze') }}" method="POST" enctype="multipart/form-data">
+      <div class="grid-2">
+        <div>
+          <label>Patient Name</label>
+          <input name="patient_name" type="text" placeholder="e.g., John Doe" />
+        </div>
+        <div class="grid-2">
+          <div>
+            <label>Age</label>
+            <input name="patient_age" type="text" placeholder="e.g., 45" />
+          </div>
+          <div>
+            <label>Sex</label>
+            <select name="patient_sex">
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label>Clinical Note (optional)</label>
+        <input name="note" type="text" placeholder="Short note..." />
+      </div>
+
+      <div class="grid-2">
+        <div class="file-upload">
+          <label>Pre Image (required)</label>
+          <input type="file" name="pre_image" accept="image/*" required />
+        </div>
+        <div class="file-upload">
+          <label>Post Image (optional)</label>
+          <input type="file" name="post_image" accept="image/*" />
+        </div>
+      </div>
+
+      <button class="btn primary big-btn" type="submit">Analyze</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="hero-left">
+    <h1>Revolutionizing <span class="accent">Disease Detection</span><br/>through Chest X-rays</h1>
+    <p class="muted">Fast, privacy-first tools for clinicians and patients.</p>
+    <div class="cta">
+      <a class="btn primary" href="{{ url_for('chatbot') }}">Symptoms Checker</a>
+      <a class="btn ghost" href="{{ url_for('xray') }}">X-ray (Doctors)</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

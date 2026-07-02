@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Symptoms Checker Chatbot</h2>
+<div class="chatbox">
+  <div id="chatlog" class="chatlog">
+    <div class="bubble">Hi! Tell me your symptoms. (Demo)</div>
+  </div>
+  <div class="chat-input">
+    <input id="chatmsg" type="text" placeholder="Type symptoms..." />
+    <button id="sendbtn" class="btn primary">Send</button>
+  </div>
+  <p class="muted small">Login is required. X-ray page is for doctors only.</p>
+</div>
+<script>
+const sendbtn = document.getElementById('sendbtn');
+const input = document.getElementById('chatmsg');
+const chatlog = document.getElementById('chatlog');
+function addBubble(text, me=false){
+  const div = document.createElement('div');
+  div.className = 'bubble ' + (me ? 'me' : '');
+  div.textContent = text;
+  chatlog.appendChild(div);
+  chatlog.scrollTop = chatlog.scrollHeight;
+}
+async function send(){
+  const msg = input.value.trim();
+  if(!msg) return;
+  addBubble(msg, true);
+  input.value = '';
+  const res = await fetch('{{ url_for("api_chat") }}', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({message: msg})
+  });
+  const data = await res.json();
+  addBubble(data.reply || '(no response)');
+}
+sendbtn.addEventListener('click', send);
+input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') send(); });
+</script>
+{% endblock %}

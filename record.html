@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Study Review</h2>
+<div class="muted small">Reference ID: {{ study.ref_id }}</div>
+
+<div class="compare-wrap">
+  <div class="compare">
+    <div class="panel">
+      <h4>Pre Image</h4>
+      <div class="imgbox">
+        <img src="/{{ study.pre_image_path }}" alt="pre"/>
+      </div>
+      <div class="links">
+        <a class="btn ghost small" href="/{{ study.pre_image_path }}" download>Download</a>
+      </div>
+    </div>
+
+    {% if study.post_image_path %}
+    <div class="panel">
+      <h4>Post Image</h4>
+      <div class="imgbox">
+        <img src="/{{ study.post_image_path }}" alt="post"/>
+      </div>
+      <div class="links">
+        <a class="btn ghost small" href="/{{ study.post_image_path }}" download>Download</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="compare">
+    <div class="panel">
+      <h4>Grad‑CAM (Pre)</h4>
+      <div class="imgbox">
+        <img src="/{{ study.pre_heatmap_path }}" alt="pre-heat"/>
+      </div>
+      <div class="links">
+        <a class="btn ghost small" href="/{{ study.pre_heatmap_path }}" download>Download</a>
+      </div>
+    </div>
+
+    {% if study.post_heatmap_path %}
+    <div class="panel">
+      <h4>Grad‑CAM (Post)</h4>
+      <div class="imgbox">
+        <img src="/{{ study.post_heatmap_path }}" alt="post-heat"/>
+      </div>
+      <div class="links">
+        <a class="btn ghost small" href="/{{ study.post_heatmap_path }}" download>Download</a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <h4>AI Prediction</h4>
+  {% set label = (study.predicted_label or '') %}
+  {% if label.lower() in ['no finding','no_finding','nofinding'] %}
+    <div class="pill">Normal / Unremarkable</div>
+  {% else %}
+    <div class="pill">{{ study.predicted_label }}</div>
+  {% endif %}
+  {% if study.confidence is not none %}
+    <div class="muted small">Confidence: {{ '%.2f'|format(study.confidence*100) }}%</div>
+  {% endif %}
+</div>
+
+<form class="card" method="POST">
+  <label>Findings (Editable Rich Text)</label>
+  <div id="editor" class="rtb" contenteditable="true">{{ study.findings_html|safe }}</div>
+  <input id="findings_html" type="hidden" name="findings_html" />
+  <div class="actions">
+    <button class="btn primary" type="submit" onclick="syncEditor()">Save to DB</button>
+    <a class="btn ghost" href="{{ url_for('report_pdf', ref_id=study.ref_id) }}">Download PDF Report</a>
+  </div>
+</form>
+
+<script>
+function syncEditor(){
+  document.getElementById('findings_html').value = document.getElementById('editor').innerHTML;
+}
+</script>
+{% endblock %}
